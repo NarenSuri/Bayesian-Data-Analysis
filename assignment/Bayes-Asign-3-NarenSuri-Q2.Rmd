@@ -1,0 +1,102 @@
+---
+title:"Bayes-Asign-3-NarenSuri-Q2"
+author:"NarenSuri"
+date:"October10,2016"
+output:html_document
+---
+
+
+
+```{r}
+## Observatons are written below each plot
+
+print("Observatons are written below each plot")
+cancerreactor=read.table("http://www.stat.washington.edu/hoff/Book/Data/hwdata/cancer_react.dat",header=T)
+#data for cancer affected people near reactors
+cancernoreactor=read.table("http://www.stat.washington.edu/hoff/Book/Data/hwdata/cancer_noreact.dat",header=T)
+#data for cancer affected people not near reactors
+
+#
+
+#Part ????B
+
+#Posterior distribution of theta_one
+
+n1=length(cancerreactor$x)
+y1sum=sum(cancerreactor$y)
+x1sum=sum(cancerreactor$x)
+
+#Posterior distribution is Gamma(a1+256,b1+95)
+
+#Posterior distribution of theta_two
+
+n2=length(cancernoreactor$x)
+y2sum=sum(cancernoreactor$y)
+x2sum=sum(cancernoreactor$x)
+
+#Posterior distribution is Gamma (a2+2285,b2+1037)
+
+#????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+#############################################################
+#Part????C
+
+parameterscalc=function(a1,b1,a2,b2,opinion)
+{
+
+print(opinion)
+posta1=a2+256
+postb1=b2+95
+posta2=a1+2285
+postb2=b1+1037
+meanthetaone=posta1/postb1
+meanthetatwo=posta2/postb2
+print(paste("Posterior Mean of near reactor given data is",meanthetaone))
+print(paste("Posterior Mean of not near reactor given data is",meanthetatwo))
+#posterior mean calculations
+
+quantiletwo=qgamma(c(.025,.975),posta2,postb2)
+print("95% quantile based posterior interval for not near reactor")
+print(quantiletwo)
+quantileone=qgamma(c(.025,.975),posta1,postb1)
+print("95% quantile based posterior interval for near reactor")
+print(quantileone)
+#Posterior mean calculation
+mcsampleone=rgamma(10000,posta1,postb1)
+mcsampletwo=rgamma(10000,posta2,postb2)
+#generate MonteCarlo samples
+print(paste("Pr(theta2>theta1jdata)is",mean(mcsampleone>
+mcsampletwo)))
+theta=seq(0.005,5.00,length=5000)
+densityone=dgamma(theta,posta1,postb1)
+densitytwo=dgamma(theta,posta2,postb2)
+
+plot(theta,densityone,type="l",ylab="Density",lty=1,
+lwd=3,main=paste("Posterior densities when a1,b1,a2,b2 are",a1,b1,a2,b2),col="red",ylim=c(min(densityone,densitytwo),max(densityone,densitytwo)))
+lines(theta,densitytwo,lty=1,lwd=3,col="blue")
+legend("topright",c("Nearreactor","Notnearreactor"),lty=c(1,1),lwd=c(3,3),col=c("red","blue"))
+
+}
+# C-1
+a1=a2=2.2*100
+b1=b2=100
+parameterscalc(a1,b1,a2,b2,"OPINION ONE")
+
+print(" From the graph we can see that the opinion stated is not true because only the cancer rate not near reactor matches with the previous year rates. ")
+
+# C-2
+a1=2.2*100
+b1=100
+a2=2.2
+b2=1
+parameterscalc(a1,b1,a2,b2,"OPINION TWO")
+
+print("From the graph we can say that the opinion is true because the cancer rate matches for nonreactor counties and previous year and almost close for reactor counties.")
+
+# C-3
+a1=a2=2.2
+b1=b2=1
+parameterscalc(a1,b1,a2,b2,"OPINION THREE")
+print("The opinion stated here is false since there is a match in the cancer rate of previous year with the nonreactor counties.")
+
+```
+

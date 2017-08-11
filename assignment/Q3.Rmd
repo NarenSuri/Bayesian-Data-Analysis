@@ -1,0 +1,101 @@
+---
+title: "Q3"
+author: "NarenSuri"
+date: "October 13, 2016"
+output: html_document
+---
+
+```{r}
+library("combinat",lib.loc="~/R/win-library/3.2")
+require("combinat")
+
+calcposterior=function(data,name)
+{
+mu0=5
+sigmasq0=4
+k0=1
+nu0=2
+#the given prior data
+n=length(data)
+#total count of the data
+dataavg=mean(data)
+#mean of the data
+datavar=var(data)
+#variance of the data
+kn=k0+n
+nun=nu0+n
+
+mun=(k0*mu0+n*dataavg)/kn
+#posterior mean calculated
+
+
+varn=(nu0*sigmasq0+(n1)*datavar+k0*n*(dataavg0)^2/(kn))/(nun)
+#posterior variance calculated
+result=paste("The posterio rmean of",name,"datais",mun)
+print(result)
+
+print("Using MonteCarlo approximation we have following")
+mcsigma=1/rgamma(1000,nun/2,varn*nun/2)
+mctheta=rnorm(1000,mun,sqrt(mcsigma/kn))
+mcpost=rnorm(1000,mctheta,mcsigma)
+#generate random samples for Monte Carlo approximation
+citheta=quantile(mctheta,c(0.025,0.975))
+#95% CI for theta
+cisigma=quantile(mcsigma,c(0.025,0.975))
+#95 % CI for sigma
+print("95% CI for theta is",citheta)
+print(citheta)
+print("95% CI for sigma is",cisigma)
+print(cisigma)
+list(theta=list(mctheta),post=list(mcpost))
+}
+
+datalist=list()
+#empty list
+dataone=read.table("school1.dat")
+datatwo=read.table("school2.dat")
+datathree=read.table("school3.dat")
+#read input data
+
+datalist$one=calcposterior(dataone$V1,"http://www.stat.washington.edu/hoff/Book/Data/hwdata/school1.dat")
+datalist$two=calcposterior(datatwo$V1,"http://www.stat.washington.edu/hoff/Book/Data/hwdata/school2.dat")
+datalist$three=calcposterior(datathree$V1,"http://www.stat.washington.edu/hoff/Book/Data/hwdata/school3.dat")
+#update the data list with the posterior prediction and theta values
+
+#????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????#Part????BandPart????C
+
+theta=c(datalist$one$theta,datalist$two$theta,datalist$three
+$theta)
+#random theta samples for all three data
+predsamples=c(datalist$one$post,datalist$two$post,datalist$three$post)
+#random predictive samples
+permvalues=permn(c(1,2,3))
+#generate all perumatation values of 1,2,3
+
+for(l in permvalues)
+{
+i=l[1]
+j=l[2]
+k=l[3]
+print(paste("i=",i,";j=",j,";k=",k))
+prtheta=mean((theta[[i]]<theta[[j]])*(theta[[j]]<theta[[k]]))
+prpred=mean((predsamples[[i]]<predsamples[[j]])*(predsamples[[j]]<predsamples[[k]]))
+print(paste("The posterior probability with data from theta",prtheta))
+print(paste("The posterior probability with data from posterior predictive",prpred))
+}
+
+#
+
+#Part????D
+
+i=1
+j=2
+k=3
+print("Part ????D")
+print(paste("i=",i,";j=",j,";k=",k))
+prtheta=mean((theta[[i]]>theta[[j]])*(theta[[i]]>theta[[k]]))
+prpred=mean((predsamples[[i]]>predsamples[[j]])*(predsamples[[i]]>predsamples[[k]]))
+print(paste("The posterior probability with data from theta",prtheta))
+print(paste("The posterior probability with data from posterior predictive",prpred))
+```
+

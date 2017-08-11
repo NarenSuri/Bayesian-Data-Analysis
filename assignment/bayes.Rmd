@@ -1,0 +1,141 @@
+---
+title: "Bayes"
+author: "NarenSuri"
+date: "September 8, 2016"
+output: html_document
+---
+
+
+
+```{r}
+
+myfunction <- function(sizeval){
+## dice rolling
+
+ x = sample(x = 1:6, size = sizeval, replace = TRUE)
+ x
+ # number of 1's 2's .... etc...  came of rolling
+ b=table(x)
+ b
+ as.vector(b)
+ 
+ # The real probability should be :
+ (1/6)^sizeval
+ a=c(1:6)
+ 
+ # number of 1's
+ a[1]= b[1]/sizeval
+ 
+  # number of 2's
+ a[2]=b[2]/sizeval
+ 
+  # number of 3's
+ a[3]=b[3]/sizeval
+ 
+ # number of 4's
+ a[4]=b[4]/sizeval
+ 
+ # number of 5's
+ a[5]=b[5]/sizeval
+ 
+ # number of 6's
+ a[6]=b[6]/sizeval
+ 
+ return(a)
+}
+ # The real probability should be :
+ (1/6)^50
+# repaaat this
+ui = rep.int(50*log(1/6),6)
+# in log scale
+50*log(1/6)
+i = myfunction(50)
+i
+# log og results obained
+li = log(i)
+li
+
+## Question B
+# repeat experiment 300 times
+ (1/6)^300
+# in log scale
+300*log(1/6)
+uj = rep.int(300*log(1/6),6)
+j = myfunction(300)
+j
+# log og results obained
+lj =log(j)
+lj
+
+## Question C
+# repeat experiment 300 times
+ (1/6)^1000
+# in log scale
+1000*log(1/6)
+# repaaat this
+uk = rep.int(1000*log(1/6),6)
+k = myfunction(1000)
+k
+# log og results obained
+lk = log(k)
+lk
+## Question D # not asked but just did
+# repeat experiment 300 times
+ (1/6)^10000
+# in log scale
+10000*log(1/6)
+# repaaat this
+ul = rep.int(10000*log(1/6),6)
+l = myfunction(10000)
+l
+# log og results obained
+ll =log(l)
+ll
+###############
+#create a matrix
+# matProb=matrix(c(ui,uj,uk,ul), nrow=4, ncol=6,byrow=TRUE)
+# matProb
+
+# matFreq=matrix(c(li, lj, lk), nrow=8, ncol=6,byrow=TRUE)
+# 
+
+# dimnames(matFreq) = list(c(50,300,1000,10000),# row names 
+# +   c(1:6)) # column names 
+# df = data.frame(matFreq)
+df
+#   cdf = cbind.data.frame(sample=c(50,300,1000,10000),df)
+# plot
+ library("ggplot2", lib.loc="~/R/win-library/3.2")
+# ggplot(data = cdf, aes(x=sample,y=) + geom_line(aes(colour=1:8)))
+# plotmatrix(mat, mapping = aes(), colour = 1:8)
+# sample 50
+li
+plot((1:6),li, col = "blue", pch = 20)
+# sample 300
+lj
+plot((1:6),lj, col = "blue", pch = 20)
+# sample 1000 
+lk
+plot((1:6),lk, col = "blue", pch = 20)
+# sample 10000 
+ll
+plot((1:6),ll, col = "blue", pch = 20)
+# sample 50 prob
+ui
+plot((1:6),ui, col = "blue", pch = 20)
+# sample 300 prob
+uj
+plot((1:6),uj, col = "blue", pch = 20)
+# sample 1000 prob
+uk
+plot((1:6),uk, col = "blue", pch = 20)
+# sample 10000 prob
+ul
+plot((1:6),ul, col = "blue", pch = 20)
+
+# The observations made are,when i selected the data from sample the chance of getting the values is equally likely among the sample of 50, when increased the sample size the chance maintained in and around the same for the sampling method - frequncy method
+
+# where as when i have the probalisitic method , with the increase in size the probability started going down a lot. so the probability of getting 1 in 10000 dices is not as same in sampling frequency method approach.
+
+
+```
